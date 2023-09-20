@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
 	id 'jacoco'
-	id 'checkstyle'
+	id 'checkstyle' 
 	id 'org.springframework.boot' version '3.1.3'
 	id 'io.spring.dependency-management' version '1.1.3'
 }
@@ -28,34 +28,23 @@ ext {
 }
 
 dependencies {
-	// implementation ('org.springframework.boot:spring-boot-starter-web') {
-    //     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    // }
-	// compileOnly 'org.springframework.boot:spring-boot-starter-tomcat'
-
-	// Spring Cloud Runtime
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0-M2'
-
-	// H2 Database with Test Scope
-	compileOnly 'com.h2database:h2:2.2.220'
-	testImplementation 'com.h2database:h2:2.2.220'
-	// runtimeOnly 'org.postgresql:postgresql' // 本番用
-
-	// Development Scope
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-	// Lombok Scope
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	// Develop Scope
+	implementation 'org.springframework.boot:spring-boot-starter-web' // framework
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // driver
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0-M2' // server
+	implementation 'org.postgresql:postgresql' // database
+	compileOnly 'org.projectlombok:lombok' // compile
+ 	annotationProcessor 'org.projectlombok:lombok' // annotation
 
 	// Test Scope
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' // framework
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // driver
+	testImplementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0-M2' // server
+	testCompileOnly group: 'com.h2database', name: 'h2', version: '2.2.224' // database
+  	testCompileOnly 'org.projectlombok:lombok' // compile
+  	testAnnotationProcessor 'org.projectlombok:lombok' // annotation
 
-	// misc dependencies
+	// misc
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
@@ -76,9 +65,11 @@ jacoco {
     toolVersion = "0.8.9"
     reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
+
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
+
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 	reports {
